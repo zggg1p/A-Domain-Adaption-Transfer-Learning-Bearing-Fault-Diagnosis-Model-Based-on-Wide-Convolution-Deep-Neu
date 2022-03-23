@@ -26,7 +26,7 @@ hyperparameter_defaults = dict(
     r=0.02
 )
 
-wandb.init(config=hyperparameter_defaults, project="WDCNN-DANN_test")
+wandb.init(config=hyperparameter_defaults, project="WDCNN-DANN")
 config = wandb.config
 
 
