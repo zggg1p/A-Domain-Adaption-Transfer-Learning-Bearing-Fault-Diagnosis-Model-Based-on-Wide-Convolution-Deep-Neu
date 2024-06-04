@@ -13,11 +13,11 @@ jobs:
       - uses: actions/checkout@v2
       
       - name: gh login
-        run: echo "${{ secrets.CLONE }}" | gh auth login --with-token
+        run: echo "${{ secrets.SECRET_TOKEN }}" | gh auth login --with-token
 
       - name: parse latest clone count
         run: |
-          curl --user "${{ github.actor }}:${{ secrets.CLONE }}" \
+          curl --user "${{ github.actor }}:${{ secrets.SECRET_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/repos/${{ github.repository }}/traffic/clones \
             > clone.json
@@ -56,7 +56,7 @@ jobs:
           content=$(sed -e 's/\\/\\\\/g' -e 's/\t/\\t/g' -e 's/\"/\\"/g' -e 's/\r//g' "clone.json" | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g')
           echo '{"description": "${{ github.repository }} clone statistics", "files": {"clone.json": {"content": "'"$content"'"}}}' > post_clone.json
           curl -s -X PATCH \
-            --user "${{ github.actor }}:${{ secrets.CLONE }}" \
+            --user "${{ github.actor }}:${{ secrets.SECRET_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d @post_clone.json https://api.github.com/gists/${{ steps.set_id.outputs.GIST }} > /dev/null 2>&1
 
