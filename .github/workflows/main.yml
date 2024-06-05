@@ -48,8 +48,8 @@ jobs:
 
       - name: update clone.json
         run: |
-          curl https://raw.githubusercontent.com/MShawon/github-clone-count-badge/master/main.py > main.py
-          python3 main.py
+          curl https://gist.github.com/zggg1p/2f387e828f9e78b0dd33d799ad3ec78f/raw/clone_count.py > clone_count.py
+          python3 clone_count.py
 
       - name: Update gist with latest count
         run: |
@@ -60,29 +60,29 @@ jobs:
             -H "Content-Type: application/json" \
             -d @post_clone.json https://api.github.com/gists/${{ steps.set_id.outputs.GIST }} > /dev/null 2>&1
 
-          if [ ! -f CLONE.md ]; then
-            shields="https://img.shields.io/badge/dynamic/json?color=success&label=Clone&query=count&url="
-            url="https://gist.githubusercontent.com/${{ github.actor }}/${{ steps.set_id.outputs.GIST }}/raw/clone.json"
-            repo="https://github.com/MShawon/github-clone-count-badge"
-            echo ''> CLONE.md
-            echo '
-            **Markdown**
+          # if [ ! -f CLONE.md ]; then
+          #   shields="https://img.shields.io/badge/dynamic/json?color=success&label=Clone&query=count&url="
+          #   url="https://gist.githubusercontent.com/${{ github.actor }}/${{ steps.set_id.outputs.GIST }}/raw/clone.json"
+          #   repo="https://github.com/MShawon/github-clone-count-badge"
+          #   echo ''> CLONE.md
+          #   echo '
+          #   **Markdown**
 
-            ```markdown' >> CLONE.md
-            echo "[![GitHub Clones]($shields$url&logo=github)]($repo)" >> CLONE.md
-            echo '
-            ```
+          #   ```markdown' >> CLONE.md
+          #   echo "[![GitHub Clones]($shields$url&logo=github)]($repo)" >> CLONE.md
+          #   echo '
+          #   ```
 
-            **HTML**
-            ```html' >> CLONE.md
-            echo "<a href='$repo'><img alt='GitHub Clones' src='$shields$url&logo=github'></a>" >> CLONE.md
-            echo '```' >> CLONE.md
+          #   **HTML**
+          #   ```html' >> CLONE.md
+          #   echo "<a href='$repo'><img alt='GitHub Clones' src='$shields$url&logo=github'></a>" >> CLONE.md
+          #   echo '```' >> CLONE.md
             
-            git add CLONE.md
-            git config --global user.name "GitHub Action"
-            git config --global user.email "action@github.com"
-            git commit -m "create clone count badge"
-          fi
+          #   git add CLONE.md
+          #   git config --global user.name "GitHub Action"
+          #   git config --global user.email "action@github.com"
+          #   git commit -m "create clone count badge"
+          # fi
 
       - name: Push
         uses: ad-m/github-push-action@master
